@@ -12,7 +12,7 @@
 
 
 ##### What's missing?
-- there is currently not IPv6 support. While CrowdSec itself supports IPv6, we currently don't have IPv6 deployed on our infrastructure so there was no need to implement that.
+- there currently is IPv6 support. While CrowdSec itself supports IPv6, we currently don't have IPv6 deployed on our infrastructure so there was no need to implement that.
 - a captcha would be nice. Even though there is a rate-limit on the unban endpoint, it can theoretically be called via code before a crawl.
 
 
