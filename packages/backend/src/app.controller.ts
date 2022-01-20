@@ -9,12 +9,12 @@ export class AppController {
 
   @Get('info')
   @SkipThrottle()
-  getHello(@RealIP() ip: string): string {
+  getHello(@RealIP() ip: string): Promise<any> {
     return this.appService.getReason(ip);
   }
 
   @Get('unban-me')
-  unbanMe(@RealIP() ip: string): string {
+  unbanMe(@RealIP() ip: string): Promise<any> {
     return this.appService.unbanMe(ip);
   }
 }
