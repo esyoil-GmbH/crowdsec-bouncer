@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <title>esyoil.com</title>
+</head>
+
+<body>
+    <div class="container" style="min-height: 100vh; max-height: 100vh;">
+
+        <div style="padding-top: 200px; width: 50%; margin: 0 auto;">
+            <h1>F&uuml;r dich ist die Stra&szlig;e hier zu Ende..</h1>
+            <p>Das ist jetzt unangenehm... Unser System hat dich als einen potentiellen Angreifer identifiziert und vorsorglich deine Anfrage blockiert. Wir &uuml;berwachen alle Seitenaufrufe um die Verf&uuml;gbarkeit unserer Plattform zu garantieren und
+                unsere Daten zu sch&uuml;tzen. </p>
+            <p>Solltest du ein legitimer Nutzer sein, kannst du dich &uuml;ber den Knopf unten entsperren. Falls du Daten von uns brauchst, schreib uns gerne eine E-Mail an <a href="mailto:esyoil@esyoil.com">esyoil@esyoil.com</a> und wir finden sicherlich
+                eine L&ouml;sung.</p>
+            <button style="margin-top: 20px;" onclick="unblock();">Entsperren</button>
+            <p id="successText" style="display: none;">Alles klar! Wir haben dich wieder freigeschaltet, es kann allerdings ein paar Minuten dauern bis die &Auml;nderungen wirksam werden. Sollten wir von deiner IP-Adresse wieder ungew&ouml;hnliche Aktivit&auml;ten festellen, werden wir uns auf
+                dieser Seite schnell wieder sehen. Automatisches Neuladen in <span id="timer">5</span> Sekunden.</p>
+            <p id="rateLimit" style="display: none;">Von dieser IP-Adresse aus wurden bereits zu viele Entsperr-Anfragen gesendet. Bitte wende dich an unseren Support oder versuche es sp&auml;ter erneut.</p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        const unblock = () => {
+            let timer = 5;
+
+            $.ajax({
+                url: "https://blocked.esyoil.com/api/unban-me",
+                success: (response) => {
+                    document.getElementById("successText").style.display = "block";
+                    setInterval(() => {
+                        timer--;
+                        document.getElementById("timer").innerText = timer;
+                        if (timer == 0) {
+                            window.location.href = "https://www.esyoil.com/";
+                        }
+                    }, 1000);
+
+                },
+                error: (a) => {
+                    console.log(a);
+                },
+                statusCode: {
+                    429: () => {
+                        $("#rateLimit").show();
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
