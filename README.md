@@ -20,4 +20,22 @@
 We only use the IP the request is coming from, for that we parse it (perhaps also any X-Forwarded-For-Headers). With the Local-API we check if there is a entry on the decisions-list for that IP. If there is one, we remove it via API. For this, we need to register a custom bouncer, since bouncers are the only allowed entity to remove entries from the decision list.
 
 #### How to set this up?
-Soon 🙃
+We are using the openresty-bouncer and modified the script to redirect to a custom domain instead of returning a 403. The sub-domain has a custom webroot so we can show the `packages/frontend/index.html`.
+
+##### Throttle limit (rate limiting)
+If you want to limit how often users can unban themselves, you can tweak the `THROTTLE_TTL` time, which is 1800 seconds in the example (so 30 minutes).
+That means that the IP can only unban itself every 30 minutes once.
+
+##### Get credentials for the LAPI
+1. run `sudo cscli bouncers add <some-name>` to generate a new API-Key. Save this key in your .env under `LAPI_KEY`. The `LAPI_HOST` is the IP of the server
+2. run `sudo cscli machines add <some-other-name>` to generate a new machine, which will be needed to remove entries from the decision list.
+3. save the name you entered under `MASCHINE_ID` and the key under `MASCHINE_PASSWORD`.
+
+##### Build from source
+
+1. clone this repository
+2. build the docker-image: `docker build -t custom-bouncer-backend:latest .`
+3. edit the .env.example and move it to .env
+4. start the docker-container `docker run --name cs-bouncer-be -d -p 3000:3000 --env-file ./.env   custom-bouncer-backend:latest`
+
+to deploy the frontend, modify and copy the `packages/frontend/index.html` to the webroot and configure the bouncer to redirect there instead of returning a status-code.
