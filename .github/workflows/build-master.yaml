@@ -3,11 +3,12 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: publish docker image (release)
+name: publish docker image (master)
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - "master"
 
 env:
   REGISTRY: ghcr.io
